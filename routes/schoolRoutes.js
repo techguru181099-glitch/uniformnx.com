@@ -96,7 +96,7 @@ router.delete("/:id", async (req, res) => {
     res.json({ message: "School deleted successfully" });
   } catch (err) {
     res.status(500).json({ message: "Server Error", error: err });
-=======
+
     const updated = await School.findByIdAndUpdate(req.params.id, { isActive: false }, { new: true });
     res.json({ message: "School deactivated successfully", school: updated });
   } catch (err) {
