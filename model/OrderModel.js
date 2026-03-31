@@ -52,10 +52,8 @@ const orderSchema = new mongoose.Schema(
         "Delivered",
         "Cancelled",
         "Return Requested",
-<<<<<<< HEAD
         "On the Way",
-=======
->>>>>>> 2a9f68f7b7e58a9db4f308f77c6be69524254f6f
+
         "Returned",
       ],
     },
