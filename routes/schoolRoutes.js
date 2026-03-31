@@ -92,7 +92,6 @@ router.put("/:id/active", async (req, res) => {
 ========================= */
 router.delete("/:id", async (req, res) => {
   try {
-<<<<<<< HEAD
     await School.findByIdAndDelete(req.params.id); // Database se hata dega
     res.json({ message: "School deleted successfully" });
   } catch (err) {
@@ -102,7 +101,6 @@ router.delete("/:id", async (req, res) => {
     res.json({ message: "School deactivated successfully", school: updated });
   } catch (err) {
     res.status(500).json(err);
->>>>>>> 2a9f68f7b7e58a9db4f308f77c6be69524254f6f
   }
 });
 
