@@ -101,7 +101,7 @@ P_router.post("/login", async (req, res) => {
   }
 });
 
-=======
+
 /* ================= FORGOT PASSWORD ================= */
 /* ================= FORGOT PASSWORD (FIXED) ================= */
 P_router.post("/forgot-password", async (req, res) => {
@@ -285,7 +285,7 @@ P_router.put("/status/:id", async (req, res) => {
       req.params.id, 
       { active: active }, 
       { new: true } 
-=======
+
 P_router.put("/status/:id", async (req, res) => {
   try {
     const { active } = req.body;
@@ -306,7 +306,7 @@ P_router.put("/status/:id", async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
-=======
+
     res.json({ success: true, active: updatedParent.active });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
