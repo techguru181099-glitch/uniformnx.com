@@ -19,10 +19,7 @@ const C_router = require("./routes/cartRoute");
 const O_router = require("./routes/orderRoute");
 const Crouter = require("./routes/categoryRouter");
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 2a9f68f7b7e58a9db4f308f77c6be69524254f6f
 /* Middleware */
 app.use(cors());
 app.use(express.json());
