@@ -3,6 +3,9 @@ const School = require("../model/school");
 
 const router = express.Router();
 
+/* =========================
+   GET CURRENT SCHOOL
+========================= */
 router.get("/current", async (req, res) => {
   try {
     const school = await School.findOne(); // first school
@@ -17,15 +20,13 @@ router.get("/current", async (req, res) => {
 ========================= */
 router.post("/", async (req, res) => {
   try {
-    // 1. Yahan 'email' add kiya (Jo pehle missing tha)
     const { name, address, email, phone, city, state } = req.body;
 
-    // 2. Name validation (Agar name nahi aaya toh prefix error dega)
     if (!name) {
       return res.status(400).json({ message: "School name is required" });
     }
 
-    // 🔥 Generate unique code
+    // Generate unique code
     const prefix = name.substring(0, 3).toUpperCase();
     const randomNumber = Math.floor(100 + Math.random() * 900);
     const schoolCode = prefix + randomNumber;
@@ -33,7 +34,7 @@ router.post("/", async (req, res) => {
     const newSchool = new School({
       name,
       address,
-      email, // Ab ye error nahi dega
+      email,
       phone,
       city,
       state,
@@ -44,12 +45,10 @@ router.post("/", async (req, res) => {
     res.status(201).json(saved);
 
   } catch (err) {
-    // Error console mein dikhega toh debugging aasan hogi
     console.error("Create School Error:", err);
     res.status(500).json({ message: err.message });
   }
 });
-
 
 /* =========================
    UPDATE SCHOOL
@@ -57,9 +56,9 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const updated = await School.findByIdAndUpdate(
-      req.params.id, // 1. ID search karne ke liye
-      req.body,      // 2. Data jo update karna hai (name, address, etc.)
-      { new: true, runValidators: true } // 3. Updated data return karega aur validation check karega
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
     );
 
     if (!updated) {
@@ -72,6 +71,9 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+/* =========================
+   TOGGLE ACTIVE STATUS
+========================= */
 router.put("/:id/active", async (req, res) => {
   try {
     const { isActive } = req.body;
@@ -88,22 +90,20 @@ router.put("/:id/active", async (req, res) => {
 });
 
 /* =========================
-   DELETE
+   DELETE SCHOOL
 ========================= */
 router.delete("/:id", async (req, res) => {
   try {
-    await School.findByIdAndDelete(req.params.id); // Database se hata dega
+    const deleted = await School.findByIdAndDelete(req.params.id);
+    if (!deleted) {
+      return res.status(404).json({ message: "School not found" });
+    }
     res.json({ message: "School deleted successfully" });
   } catch (err) {
-    res.status(500).json({ message: "Server Error", error: err });
-
-    const updated = await School.findByIdAndUpdate(req.params.id, { isActive: false }, { new: true });
-    res.json({ message: "School deactivated successfully", school: updated });
-  } catch (err) {
-    res.status(500).json(err);
+    console.error("Delete Error:", err);
+    res.status(500).json({ message: "Server Error", error: err.message });
   }
 });
-
 
 /* =========================
    GET ALL SCHOOLS
