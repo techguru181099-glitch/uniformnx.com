@@ -18,7 +18,6 @@ const transporter = nodemailer.createTransport({
 });
 
 // ================= ADMIN LOGIN =================
-=======
 
 const SECRET_KEY = process.env.SECRET_KEY;
 
@@ -62,7 +61,7 @@ U_router.post("/login", async (req, res) => {
       permissions: user.permissions || [],
       message: "Login successful",
     });
-=======
+
   try {
 
     const { username, email, password } = req.body;
@@ -165,7 +164,6 @@ U_router.post("/logout", async (req, res) => {
       { username, role: "admin" },
       { isLoggedIn: false, currentSession: null, lastLogout: new Date() }
     );
-=======
 // ================= SEND OTP =================
 
 U_router.post("/send-otp", async (req, res) => {
@@ -237,7 +235,6 @@ U_router.post("/add-team", async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const staff = new User({
-=======
 
 // ================= VERIFY OTP =================
 
@@ -536,7 +533,7 @@ U_router.delete("/delete-staff/:id", async (req, res) => {
     console.error("Delete Error:", err);
     res.status(500).json({ message: "Internal Server Error" });
   }
-=======
+
       phone,
       address,
       city,
