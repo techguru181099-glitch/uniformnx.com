@@ -6,7 +6,6 @@ const nodemailer = require("nodemailer");
 const User = require("../model/login");
 
 const U_router = express.Router();
-<<<<<<< HEAD
 const SECRET_KEY = process.env.SECRET_KEY || "default_secret_key";
 
 // ================= Nodemailer Config =================
@@ -26,7 +25,6 @@ const SECRET_KEY = process.env.SECRET_KEY;
 
 // ================= ADMIN LOGIN =================
 
->>>>>>> 2a9f68f7b7e58a9db4f308f77c6be69524254f6f
 U_router.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body;
