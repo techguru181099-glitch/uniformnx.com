@@ -29,7 +29,6 @@ O_router.post("/order", async (req, res) => {
       return res.status(404).json({ message: "Parent not found" });
     }
 
-<<<<<<< HEAD
     let totalAmount = 0;
     const formattedItems = [];
 
@@ -260,7 +259,6 @@ O_router.get("/:parentId", async (req, res) => {
 
   } catch (err) {
     res.status(500).json(err.message);
->>>>>>> 2a9f68f7b7e58a9db4f308f77c6be69524254f6f
   }
 });
 
