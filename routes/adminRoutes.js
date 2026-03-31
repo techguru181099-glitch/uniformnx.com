@@ -31,7 +31,7 @@ U_router.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body;
 
-<<<<<<< HEAD
+
     if (!username || !password) {
       return res.status(400).json({ message: "Username and Password required!" });
     }
@@ -149,7 +149,7 @@ U_router.post("/login", async (req, res) => {
     });
 
   }
->>>>>>> 2a9f68f7b7e58a9db4f308f77c6be69524254f6f
+
 
   } catch (err) {
     res.status(500).json({ message: "Internal Server Error" });
@@ -162,7 +162,7 @@ U_router.post("/logout", async (req, res) => {
     const { username } = req.body;
     if (!username) return res.status(400).json({ message: "Username required!" });
 
-<<<<<<< HEAD
+
     await User.findOneAndUpdate(
       { username, role: "admin" },
       { isLoggedIn: false, currentSession: null, lastLogout: new Date() }
@@ -219,7 +219,7 @@ U_router.post("/send-otp", async (req, res) => {
     });
 
   }
->>>>>>> 2a9f68f7b7e58a9db4f308f77c6be69524254f6f
+
 
     res.status(200).json({ message: "Logout successful" });
   } catch (err) {
@@ -227,7 +227,7 @@ U_router.post("/send-otp", async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
+
 // ================= ADD STAFF MEMBER =================
 U_router.post("/add-team", async (req, res) => {
   try {
@@ -354,12 +354,12 @@ U_router.post("/add-staff", async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newStaff = new User({
->>>>>>> 2a9f68f7b7e58a9db4f308f77c6be69524254f6f
+
       fullName,
       email,
       username,
       password: hashedPassword,
-<<<<<<< HEAD
+
       role: "staff",
       permissions,
     });
