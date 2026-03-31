@@ -2,13 +2,11 @@ const express = require("express");
 const Crouter = express.Router();
 const Category = require("../model/categoryModel");
 
-<<<<<<< HEAD
 
 // GET all categories
-=======
+
 // GET all categories
 // GET categories
->>>>>>> 2a9f68f7b7e58a9db4f308f77c6be69524254f6f
 Crouter.get("/", async (req, res) => {
   try {
     const categories = await Category.find().sort({ name: 1 });
@@ -20,7 +18,7 @@ Crouter.get("/", async (req, res) => {
 
 
 // ADD new category
-=======
+
 // ADD category
 Crouter.post("/", async (req, res) => {
   try {
@@ -35,7 +33,7 @@ Crouter.post("/", async (req, res) => {
     }
 
     // new category create
-=======
+
     if (exist) return res.json(exist);
 
     const newCat = new Category({
@@ -51,7 +49,6 @@ Crouter.post("/", async (req, res) => {
   }
 });
 
-=======
 // ADD new category
 Crouter.post("/", async (req, res) => {
   try {
