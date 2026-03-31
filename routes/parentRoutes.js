@@ -101,6 +101,10 @@ P_router.post("/login", async (req, res) => {
   }
 });
 
+<<<<<<< HEAD
+=======
+/* ================= FORGOT PASSWORD ================= */
+>>>>>>> 2a9f68f7b7e58a9db4f308f77c6be69524254f6f
 /* ================= FORGOT PASSWORD (FIXED) ================= */
 P_router.post("/forgot-password", async (req, res) => {
   try {
@@ -273,6 +277,7 @@ P_router.get("/parent/:id", async (req, res) => {
 });
 
 /* ================= UPDATE STATUS (Active/Inactive) - FIXED ⭐ ================= */
+<<<<<<< HEAD
 // parentRoutes.js
 P_router.put("/status/:id", async (req, res) => {
   try {
@@ -283,12 +288,22 @@ P_router.put("/status/:id", async (req, res) => {
       req.params.id, 
       { active: active }, 
       { new: true } 
+=======
+P_router.put("/status/:id", async (req, res) => {
+  try {
+    const { active } = req.body;
+    const updatedParent = await Parent.findByIdAndUpdate(
+      req.params.id,
+      { active: active },
+      { new: true }
+>>>>>>> 2a9f68f7b7e58a9db4f308f77c6be69524254f6f
     );
 
     if (!updatedParent) {
       return res.status(404).json({ success: false, message: "Parent not found" });
     }
 
+<<<<<<< HEAD
     res.json({ 
       success: true, 
       message: `Account ${active ? 'Activated' : 'Deactivated'} successfully`,
@@ -296,6 +311,11 @@ P_router.put("/status/:id", async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
+=======
+    res.json({ success: true, active: updatedParent.active });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+>>>>>>> 2a9f68f7b7e58a9db4f308f77c6be69524254f6f
   }
 });
 

@@ -71,10 +71,16 @@ C_router.get("/:parentId", async (req,res)=>{
  try {
 
   const cart = await Cart.find({
+<<<<<<< HEAD
  parentId: req.params.parentId,
  status: "active"   // ⭐ IMPORTANT
 })
 .populate("uniformId");
+=======
+    parentId:req.params.parentId
+  })
+  .populate("uniformId");
+>>>>>>> 2a9f68f7b7e58a9db4f308f77c6be69524254f6f
 
   res.json(cart);
 
@@ -186,6 +192,7 @@ C_router.delete("/clear/:parentId", async (req, res) => {
 
  }
 
+<<<<<<< HEAD
 });
 
 C_router.put("/afterOrder/:parentId", async (req,res)=>{
@@ -201,6 +208,8 @@ C_router.put("/afterOrder/:parentId", async (req,res)=>{
  }catch(err){
   res.status(500).json(err.message);
  }
+=======
+>>>>>>> 2a9f68f7b7e58a9db4f308f77c6be69524254f6f
 });
 
 module.exports = C_router;

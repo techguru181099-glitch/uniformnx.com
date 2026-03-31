@@ -181,6 +181,34 @@ UF_router.delete("/:id", async (req, res) => {
   }
 });
 
+<<<<<<< HEAD
+=======
+/* ================= GET UNIQUE CLASSES ================= */
+// UF_router.get("/classes/:schoolId", async (req, res) => {
+//   try {
+//     const classes = await uniformModel
+//       .find({ schoolId: req.params.schoolId })
+//       .distinct("className");
+
+//     const sortedClasses = classes.sort((a, b) =>
+//       a.localeCompare(b, undefined, { numeric: true })
+//     );
+//     res.json(sortedClasses);
+//   } catch (err) {
+//     res.status(500).json({ message: err.message });
+//   }
+// });
+
+// UF_router.get("/school/:schoolId", async (req, res) => {
+//   try {
+//     // Ye line database mein 'school' field check karegi jo School ki ObjectId store karta hai
+//     const uniforms = await Uniform.find({ school: req.params.schoolId });
+//     res.json(uniforms);
+//   } catch (err) {
+//     res.status(500).json({ message: "Error fetching uniforms", error: err.message });
+//   }
+// });
+>>>>>>> 2a9f68f7b7e58a9db4f308f77c6be69524254f6f
 
 /* ================= GET ALL UNIFORMS (For Admin) ================= */
 UF_router.get("/all", async (req, res) => {
