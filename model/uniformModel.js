@@ -16,14 +16,11 @@ sizeCategory: {
 },
   status: { type: String, default: "active" },
   stock: { type: Number, default: 0 },
-<<<<<<< HEAD
   totalStock: {
     type: Number,
     default: 0
   },
 
-=======
->>>>>>> 2a9f68f7b7e58a9db4f308f77c6be69524254f6f
   isAvailable: { type: Boolean, default: true },
 }, { timestamps: true });
 
