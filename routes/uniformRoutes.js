@@ -181,7 +181,6 @@ UF_router.delete("/:id", async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
 =======
 /* ================= GET UNIQUE CLASSES ================= */
 // UF_router.get("/classes/:schoolId", async (req, res) => {
@@ -208,7 +207,6 @@ UF_router.delete("/:id", async (req, res) => {
 //     res.status(500).json({ message: "Error fetching uniforms", error: err.message });
 //   }
 // });
->>>>>>> 2a9f68f7b7e58a9db4f308f77c6be69524254f6f
 
 /* ================= GET ALL UNIFORMS (For Admin) ================= */
 UF_router.get("/all", async (req, res) => {
