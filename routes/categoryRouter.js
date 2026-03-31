@@ -18,12 +18,10 @@ Crouter.get("/", async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
 
 // ADD new category
 =======
 // ADD category
->>>>>>> 2a9f68f7b7e58a9db4f308f77c6be69524254f6f
 Crouter.post("/", async (req, res) => {
   try {
 
@@ -31,7 +29,6 @@ Crouter.post("/", async (req, res) => {
       name: req.body.name
     });
 
-<<<<<<< HEAD
     // agar category already hai
     if (exist) {
       return res.json(exist);
@@ -41,7 +38,6 @@ Crouter.post("/", async (req, res) => {
 =======
     if (exist) return res.json(exist);
 
->>>>>>> 2a9f68f7b7e58a9db4f308f77c6be69524254f6f
     const newCat = new Category({
       name: req.body.name
     });
@@ -55,7 +51,6 @@ Crouter.post("/", async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
 =======
 // ADD new category
 Crouter.post("/", async (req, res) => {
@@ -78,6 +73,5 @@ Crouter.post("/", async (req, res) => {
     res.status(500).json(err.message);
   }
 });
->>>>>>> 2a9f68f7b7e58a9db4f308f77c6be69524254f6f
 
 module.exports = Crouter;
