@@ -1,11 +1,14 @@
-const mongoose=require("mongoose")
-// mongoose.connect("mongodb+srv://admin:admin%40123@cluster0.qroqwfz.mongodb.net/schoolDB")
-mongoose.connect("mongodb://127.0.0.1:27017/edusupply")
-const db=mongoose.connection
-db.on("connected",(err,data)=>{
-    if(err){
-        console.log(err)
-    }else{
-        console.log("database connect")
+const mongoose = require("mongoose");
+
+const connectDB = async () => {
+    try {
+        await mongoose.connect(process.env.MONGO_URL);
+
+        console.log("✅ Database Connected");
+    } catch (error) {
+        console.log("❌ Database Connection Failed:", error);
+        process.exit(1);
     }
-})
+};
+
+module.exports = connectDB;

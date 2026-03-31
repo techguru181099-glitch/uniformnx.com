@@ -41,17 +41,38 @@ const orderSchema = new mongoose.Schema(
       default: "Pending",
     },
 
+    // ⭐ Status mein Enum add kiya taaki fix values hi save ho sakein
     status: {
       type: String,
       default: "Pending",
+      enum: [
+        "Pending",
+        "Processing",
+        "Shipped",
+        "Delivered",
+        "Cancelled",
+        "Return Requested",
+        "On the Way",
+        "Returned",
+      ],
+    },
+
+    // ⭐ Return ka reason store karne ke liye naya field
+    returnReason: {
+      type: String,
+      default: "",
     },
 
     orderDate: {
       type: Date,
       default: Date.now,
     },
+    droponOrderId: {
+      type: String,
+      default: "",
+    },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 module.exports = mongoose.model("Order", orderSchema);
