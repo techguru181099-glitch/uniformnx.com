@@ -76,7 +76,7 @@ C_router.get("/:parentId", async (req,res)=>{
  status: "active"   // ⭐ IMPORTANT
 })
 .populate("uniformId");
-=======
+
     parentId:req.params.parentId
   })
   .populate("uniformId");
