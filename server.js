@@ -17,15 +17,32 @@ const UF_router = require("./routes/uniformRoutes");
 const C_router = require("./routes/cartRoute");
 const O_router = require("./routes/orderRoute");
 const Crouter = require("./routes/categoryRouter");
+const paymentRouter = require("./routes/paymentRoutes");
 
-/* ================= Middleware (Updated for Production) ================= */
-app.use(cors({
-  origin: ["https://uniformnx.com", "https://www.uniformnx.com"], // Frontend domain allowed
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true
-}));
+/* ================= Middleware (Updated for Localhost + Production) ================= */
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://uniformnx.com",
+  "https://www.uniformnx.com",
+  process.env.FRONTEND_URL,
+].filter(Boolean);
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("CORS not allowed"));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    credentials: true,
+  })
+);
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static("uploads"));
 
 /* Routes Use */
@@ -37,10 +54,11 @@ app.use("/uniform", UF_router);
 app.use("/cart", C_router);
 app.use("/orders", O_router);
 app.use("/categories", Crouter);
+app.use("/api/payment", paymentRouter);
 
 /* Root Route */
-app.get("/", (res, response) => {
-    response.send("🚀 School Backend Running Successfully");
+app.get("/", (req, res) => {
+  res.send("🚀 School Backend Running Successfully");
 });
 
 /* Server Start */
