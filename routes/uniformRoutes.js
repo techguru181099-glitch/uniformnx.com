@@ -5,6 +5,9 @@ const uniformModel = require("../model/uniformModel");
 const categoryModel = require("../model/categoryModel");
 
 const UF_router = express.Router();
+const allowedImageMimeTypes = ["image/jpeg", "image/png"];
+const allowedImageExtensions = [".jpg", ".jpeg", ".png"];
+const imageOnlyMessage = "Only JPG and PNG image files are allowed";
 
 /* ================= MULTER CONFIGURATION ================= */
 const storage = multer.diskStorage({
@@ -12,22 +15,46 @@ const storage = multer.diskStorage({
     cb(null, "uploads/");
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
+    cb(null, `${Date.now()}-${Math.round(Math.random() * 1e9)}${path.extname(file.originalname)}`);
   },
 });
 
-const upload = multer({ storage });
+const fileFilter = (req, file, cb) => {
+  const extension = path.extname(file.originalname || "").toLowerCase();
+  const isAllowedMime = allowedImageMimeTypes.includes(file.mimetype);
+  const isAllowedExtension = allowedImageExtensions.includes(extension);
+
+  if (isAllowedMime && isAllowedExtension) {
+    cb(null, true);
+    return;
+  }
+
+  cb(new Error(imageOnlyMessage));
+};
+
+const upload = multer({ storage, fileFilter });
+const uploadUniformFiles = (req, res, next) => {
+  upload.fields([
+    { name: "image", maxCount: 10 },
+    { name: "sizeGuide", maxCount: 1 },
+  ])(req, res, (err) => {
+    if (err) {
+      return res.status(400).json({ message: err.message || imageOnlyMessage });
+    }
+
+    next();
+  });
+};
 
 /* ================= ADD UNIFORM (Product + Size Guide) ================= */
 UF_router.post(
   "/",
-  upload.fields([
-    { name: "image", maxCount: 1 },
-    { name: "sizeGuide", maxCount: 1 },
-  ]),
+  uploadUniformFiles,
   async (req, res) => {
     try {
-      if (!req.files || !req.files["image"]) {
+      const productImages = req.files?.["image"] || [];
+
+      if (productImages.length === 0) {
         return res
           .status(400)
           .json({ message: "Main Product Image is required" });
@@ -54,10 +81,12 @@ UF_router.post(
         description: req.body.description,
         sizeCategory: category.name,
         stock: req.body.stock || 0,
+        totalStock: req.body.totalStock || req.body.stock || 0,
         isAvailable:
           req.body.isAvailable !== undefined ? req.body.isAvailable : true,
         status: "active",
-        image: req.files["image"][0].filename,
+        image: productImages[0].filename,
+        images: productImages.map((file) => file.filename),
         sizeGuide: req.files["sizeGuide"]
           ? req.files["sizeGuide"][0].filename
           : null,
@@ -76,10 +105,7 @@ UF_router.post(
 /* ================= UPDATE UNIFORM ================= */
 UF_router.put(
   "/:id",
-  upload.fields([
-    { name: "image", maxCount: 1 },
-    { name: "sizeGuide", maxCount: 1 },
-  ]),
+  uploadUniformFiles,
   async (req, res) => {
     try {
       console.log("BODY DATA:", req.body);
@@ -89,9 +115,11 @@ UF_router.put(
         updateData.isAvailable = updateData.stock > 0;
       }
 
-      // Update main image if new one uploaded
-      if (req.files && req.files["image"]) {
-        updateData.image = req.files["image"][0].filename;
+      // Update product gallery if new images uploaded
+      if (req.files && req.files["image"] && req.files["image"].length > 0) {
+        const productImages = req.files["image"].map((file) => file.filename);
+        updateData.image = productImages[0];
+        updateData.images = productImages;
       }
 
       // Update size guide if new one uploaded

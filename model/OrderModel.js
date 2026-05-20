@@ -41,6 +41,16 @@ const orderSchema = new mongoose.Schema(
       default: "Pending",
     },
 
+    razorpayOrderId: {
+      type: String,
+      default: "",
+    },
+
+    razorpayPaymentId: {
+      type: String,
+      default: "",
+    },
+
     // ⭐ Status mein Enum add kiya taaki fix values hi save ho sakein
     status: {
       type: String,

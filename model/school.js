@@ -2,9 +2,9 @@ const mongoose = require("mongoose");
 
 const schoolSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
+    name: { type: String, required: true, trim: true },
     address: String,
-    email: { type: String },
+    email: { type: String, trim: true, lowercase: true },
     phone: String,
     city: String,
     state: String,

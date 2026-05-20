@@ -21,7 +21,17 @@ const instance = new razorpay({
 /* ================= 1. PLACE ORDER & AUTO-FILL LOGIC ================= */
 O_router.post("/order", async (req, res) => {
   try {
-    const { parentId, items, deliveryType, address, paymentMethod, bankDetails } = req.body;
+    const {
+      parentId,
+      items,
+      deliveryType,
+      address,
+      paymentMethod,
+      paymentStatus,
+      bankDetails,
+      razorpayOrderId,
+      razorpayPaymentId
+    } = req.body;
     const parentData = await ParentModel.findById(parentId).populate("schoolId");
 
     if (!parentData) {
@@ -72,7 +82,9 @@ O_router.post("/order", async (req, res) => {
       address,
       bankDetails,
       paymentMethod,
-      paymentStatus: paymentMethod === "Online" ? "Paid" : "Pending",
+      paymentStatus: paymentStatus || (paymentMethod === "RAZORPAY" ? "Paid" : "Pending"),
+      razorpayOrderId,
+      razorpayPaymentId,
       status: "Pending"
     });
 

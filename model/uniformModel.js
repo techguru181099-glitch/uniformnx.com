@@ -7,6 +7,7 @@ const uniformSchema = new mongoose.Schema({
   house: { type: String, required: true },
   price: { type: Number, required: true },
   image: { type: String, required: true }, // Main Image
+  images: [{ type: String }], // Product gallery images
   sizeGuide: { type: String }, // Size Guide Image (Added this)
   description: { type: String, required: true },
 sizeCategory: {

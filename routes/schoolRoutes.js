@@ -3,6 +3,45 @@ const School = require("../model/school");
 
 const router = express.Router();
 
+const escapeRegex = (value = "") => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+const findDuplicateSchool = async ({ name, email, excludeId }) => {
+  const duplicateChecks = [];
+
+  if (name) {
+    duplicateChecks.push({
+      name: { $regex: `^${escapeRegex(name)}$`, $options: "i" },
+    });
+  }
+
+  if (email) {
+    duplicateChecks.push({
+      email: { $regex: `^${escapeRegex(email)}$`, $options: "i" },
+    });
+  }
+
+  if (duplicateChecks.length === 0) return null;
+
+  const query = { $or: duplicateChecks };
+  if (excludeId) query._id = { $ne: excludeId };
+
+  return School.findOne(query);
+};
+
+const generateSchoolCode = async (name) => {
+  const prefix = name.substring(0, 3).toUpperCase();
+  let schoolCode;
+  let exists = true;
+
+  while (exists) {
+    const randomNumber = Math.floor(100 + Math.random() * 900);
+    schoolCode = prefix + randomNumber;
+    exists = await School.exists({ schoolCode });
+  }
+
+  return schoolCode;
+};
+
 /* =========================
    GET CURRENT SCHOOL
 ========================= */
@@ -20,16 +59,30 @@ router.get("/current", async (req, res) => {
 ========================= */
 router.post("/", async (req, res) => {
   try {
-    const { name, address, email, phone, city, state } = req.body;
+    const { address, phone, city, state } = req.body;
+    const name = String(req.body.name || "").trim();
+    const email = String(req.body.email || "").trim().toLowerCase();
 
     if (!name) {
       return res.status(400).json({ message: "School name is required" });
     }
 
-    // Generate unique code
-    const prefix = name.substring(0, 3).toUpperCase();
-    const randomNumber = Math.floor(100 + Math.random() * 900);
-    const schoolCode = prefix + randomNumber;
+    const duplicate = await findDuplicateSchool({ name, email });
+    if (duplicate) {
+      const duplicateField =
+        duplicate.name?.toLowerCase() === name.toLowerCase()
+          ? "name"
+          : "email";
+
+      return res.status(409).json({
+        message:
+          duplicateField === "name"
+            ? "A school with this name already exists"
+            : "A school with this email already exists",
+      });
+    }
+
+    const schoolCode = await generateSchoolCode(name);
 
     const newSchool = new School({
       name,
@@ -55,9 +108,33 @@ router.post("/", async (req, res) => {
 ========================= */
 router.put("/:id", async (req, res) => {
   try {
+    const updateData = { ...req.body };
+    if (updateData.name !== undefined) updateData.name = String(updateData.name).trim();
+    if (updateData.email !== undefined) updateData.email = String(updateData.email).trim().toLowerCase();
+
+    const duplicate = await findDuplicateSchool({
+      name: updateData.name,
+      email: updateData.email,
+      excludeId: req.params.id,
+    });
+
+    if (duplicate) {
+      const duplicateField =
+        updateData.name && duplicate.name?.toLowerCase() === updateData.name.toLowerCase()
+          ? "name"
+          : "email";
+
+      return res.status(409).json({
+        message:
+          duplicateField === "name"
+            ? "A school with this name already exists"
+            : "A school with this email already exists",
+      });
+    }
+
     const updated = await School.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      updateData,
       { new: true, runValidators: true }
     );
 
