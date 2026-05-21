@@ -21,14 +21,26 @@ const paymentRouter = require("./routes/paymentRoutes");
 
 /* ================= Middleware ================= */
 
-// Updated CORS: Ab ye Localhost aur Live dono pe chalega
+// Updated CORS: local dev ports + live domain dono pe chalega.
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://localhost:3000",
+  "http://localhost:3001",
+  "http://localhost:3002",
+  "http://127.0.0.1:3000",
+  "http://127.0.0.1:3001",
+  "http://127.0.0.1:3002",
+  "https://uniformnx.com",
+  "https://www.uniformnx.com"
+];
+
 app.use(cors({
-  origin: [
-    "http://localhost:3000",
-    "https://localhost:3000",
-    "https://uniformnx.com",
-    "https://www.uniformnx.com"
-  ],
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error("Not allowed by CORS"));
+  },
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));

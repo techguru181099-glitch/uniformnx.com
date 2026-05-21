@@ -23,13 +23,17 @@ const transporter = nodemailer.createTransport({
 U_router.post("/login", async (req, res) => {
   try {
     const { username, email, password, role } = req.body;
+    const loginId = String(username || "").trim();
+    const emailId = String(email || "").trim();
 
-    if (!username || !password) {
+    if (!loginId || !password) {
       return res.status(400).json({ message: "Username and Password required!" });
     }
 
-    // Find user by username or email
-    let user = await User.findOne({ $or: [{ username }, { email }] });
+    // Find user by username or email. Login form sends email in username field.
+    const loginQuery = [{ username: loginId }, { email: loginId }];
+    if (emailId) loginQuery.push({ username: emailId }, { email: emailId });
+    let user = await User.findOne({ $or: loginQuery });
 
     // Auto-create Admin if not exists (for first time setup)
     if (!user && email && role === "admin") {
@@ -39,8 +43,8 @@ U_router.post("/login", async (req, res) => {
 
       const hashedPassword = await bcrypt.hash(password, 10);
       user = new User({
-        username,
-        email,
+        username: loginId,
+        email: emailId,
         password: hashedPassword,
         role: "admin",
         permissions: ["view_parents", "view_schools", "view_products", "view_orders", "view_revenue", "manage_team"]
